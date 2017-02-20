@@ -1,0 +1,65 @@
+
+
+1. SupportVector
+    SupportVector.bound = true  [is default]
+
+
+2. 主要步骤
+
+    int numChanged = 0;
+    boolean examineAll = true;                                       // 首先便利
+    while(numChanged > 0 || examineAll) {                            // 外部循环 （ 首次 或者 如果有违反KKT条件的就会有继续 numChanged）
+        numChanged = 0;
+        for(SupportVector v : svm.vectors)                           // 遍历所有样例
+            if((examineAll || !v.bound) && examineExample(v))        // v.bound == true ==>   0 + epsilon < v.alpha < svm.c - epsilon   //epsilon为自适应
+                                                                     //
+                numChanged++;
+        if(examineAll)
+            // only examine non-bound examples in next pass
+            examineAll = false;
+        else if(numChanged == 0)
+            // all of the non-bound examples satisfy the KKT conditions,
+            // so examine the entire training set again
+            examineAll = true;
+    }
+
+
+
+    -------------------------------
+    -------------------------------
+     numChanged =  6
+     examineAll =  false
+    -------------------------------
+    -------------------------------
+     numChanged =  5
+     examineAll =  false
+    -------------------------------
+    -------------------------------
+     numChanged =  4
+     examineAll =  false
+    -------------------------------
+    -------------------------------
+     numChanged =  5
+     examineAll =  false
+    -------------------------------
+    -------------------------------
+     numChanged =  4
+     examineAll =  false
+    -------------------------------
+    -------------------------------
+     numChanged =  0
+     examineAll =  true
+    -------------------------------
+    -------------------------------
+     numChanged =  0
+     examineAll =  false
+    -------------------------------
+
+
+    //检查各个样例的 KKT 条件
+    if(satisfiesKKTConditions(v))
+
+
+
+    【？？？】首先遍历哪个集合
+
